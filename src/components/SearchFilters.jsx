@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import useDeliveryStore from '../store/useDeliveryStore';
-import { getStateAndCityPicklist } from '../../constants/usStateAndCity';
+import { getStateAndCityPicklist, categories } from '../../constants/usStateAndCity';
 
 const SearchFilters = () => {
   const { filters, setFilters } = useDeliveryStore();
@@ -45,7 +45,6 @@ const SearchFilters = () => {
     setLocalFilters(filters);
     setIsDrawerOpen(true);
   };
-  const categories = ["Food", "Drinks", "Groceries", "Electronics", "Clothing", "Documents"];
 
   const FilterInputs = ({ isMobile }) => {
     const currentFilters = isMobile ? localFilters : filters;

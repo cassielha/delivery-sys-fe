@@ -202,3 +202,5 @@ export const getStateAndCityPicklist = () => {
         }
     };
 };
+
+export const categories = ["Delivery", "Air Conditioning & Heating", "Plumbing"];

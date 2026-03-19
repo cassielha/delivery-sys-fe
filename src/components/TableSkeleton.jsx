@@ -58,8 +58,7 @@ const TableSkeleton = () => {
                 </div>
             </div>
 
-            {/* Pagination Skeleton */}
-            <div className="flex justify-between items-center px-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm">
+            <div className="flex justify-between items-center px-4 py-7 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm">
                 <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-32"></div>
                 <div className="flex gap-2">
                     <div className="h-8 w-8 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
