@@ -38,9 +38,9 @@ const DataTable = ({ data }) => {
                     <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 table-fixed">
                         <thead className="text-xs text-gray-700 dark:text-gray-300 uppercase bg-gray-50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700">
                             <tr>
-                                <th scope="col" className="w-[8%] px-4 py-4 font-bold tracking-wider">ID</th>
-                                <th scope="col" className="w-[18%] px-4 py-4 font-bold tracking-wider">Organization</th>
-                                <th scope="col" className="w-[15%] px-4 py-4 font-bold tracking-wider">Category</th>
+                                <th scope="col" className="w-[5%] px-4 py-4 font-bold tracking-wider">ID</th>
+                                <th scope="col" className="w-[20%] px-4 py-4 font-bold tracking-wider">Organization</th>
+                                <th scope="col" className="w-[10%] px-4 py-4 font-bold tracking-wider">Category</th>
                                 <th scope="col" className="w-[10%] px-4 py-4 font-bold tracking-wider text-right">Rating</th>
                                 <th scope="col" className="w-[10%] px-4 py-4 font-bold tracking-wider text-right">City</th>
                                 <th scope="col" className="w-[8%] px-4 py-4 font-bold tracking-wider text-right">State</th>

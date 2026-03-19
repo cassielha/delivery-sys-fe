@@ -11,6 +11,7 @@ const useDeliveryStore = create((set) => ({
     currentPage: 1,
     limit: 10,
     searchQuery: "",
+    filters: { state: "", city: "", category: "", minRating: "", maxRating: "" },
 
     // Actions
     openAdd: () => set({
@@ -59,6 +60,13 @@ const useDeliveryStore = create((set) => ({
     setSearchQuery: (query) => set((state) => ({
         searchQuery: typeof query === 'function' ? query(state.searchQuery) : query
     })),
+    setFilters: (newFilters) => set((state) => {
+        const updatedFilters = typeof newFilters === 'function' ? newFilters(state.filters) : newFilters;
+        return {
+            filters: { ...state.filters, ...updatedFilters },
+            currentPage: 1
+        };
+    }),
 }));
 
 export default useDeliveryStore;

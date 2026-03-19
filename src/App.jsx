@@ -4,7 +4,9 @@ import { ThemeToggle } from "./components/ThemeToggle";
 import useDeliveryStore from "./store/useDeliveryStore";
 import { useDeliveryData } from "./hooks/useDelivery";
 import SearchBar from "./components/SearchBar";
+import SearchFilters from "./components/SearchFilters";
 import DeliveryDetailModal from "./components/DeliveryDetailModal";
+import TableSkeleton from "./components/TableSkeleton";
 
 const App = () => {
   const { data, isPending, error } = useDeliveryData();
@@ -16,16 +18,17 @@ const App = () => {
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-center sm:text-left">Delivery System</h1>
           <ThemeToggle />
         </div>
-        
-        {/* Actions row: Search Bar */}
+
         <div className="flex justify-center sm:justify-start">
           <SearchBar />
         </div>
 
+        <div className="flex justify-center sm:justify-start w-full">
+          <SearchFilters />
+        </div>
+
         {isPending ? (
-          <div className="flex justify-center p-10">
-            <div className="animate-pulse text-gray-500 font-medium">Loading deliveries...</div>
-          </div>
+          <TableSkeleton />
         ) : error ? (
           <div className="flex justify-center p-10">
             <div className="text-red-500 font-medium">{error.message}</div>

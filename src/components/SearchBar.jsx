@@ -3,11 +3,22 @@ import useDeliveryStore from "../store/useDeliveryStore";
 import { BASE_URL } from "../../constants/global-variable";
 
 const SearchBar = () => {
-  const { setSearchQuery, setCurrentPage } = useDeliveryStore();
+  const { setSearchQuery, setCurrentPage, searchQuery } = useDeliveryStore();
   const [inputValue, setInputValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
   const suggestionRef = useRef(null);
+  const listRef = useRef(null);
+
+  useEffect(() => {
+    if (activeIndex >= 0 && listRef.current) {
+      const activeItem = listRef.current.children[activeIndex];
+      if (activeItem) {
+        activeItem.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      }
+    }
+  }, [activeIndex]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -20,8 +31,9 @@ const SearchBar = () => {
   }, []);
 
   useEffect(() => {
-    if (inputValue.trim().length === 0) {
+    if (inputValue.trim().length === 0 || inputValue === searchQuery) {
       setSuggestions([]);
+      setShowSuggestions(false);
       return;
     }
 
@@ -32,11 +44,12 @@ const SearchBar = () => {
           const data = await response.json();
           setSuggestions(data);
           setShowSuggestions(true);
+          setActiveIndex(-1);
         }
       } catch (error) {
         console.error("Failed to fetch suggestions:", error);
       }
-    }, 150);
+    }, 250);
 
     return () => clearTimeout(timer);
   }, [inputValue]);
@@ -46,11 +59,26 @@ const SearchBar = () => {
     setSearchQuery(finalQuery);
     setCurrentPage(1);
     setShowSuggestions(false);
+    setActiveIndex(-1);
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleSearch();
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : prev));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIndex((prev) => (prev > 0 ? prev - 1 : -1));
+    } else if (e.key === "Enter") {
+      if (activeIndex >= 0 && activeIndex < suggestions.length) {
+        const selected = suggestions[activeIndex];
+        setInputValue(selected);
+        handleSearch(selected);
+      } else {
+        handleSearch();
+      }
+    } else if (e.key === "Escape") {
+      setShowSuggestions(false);
     }
   };
 
@@ -81,7 +109,10 @@ const SearchBar = () => {
         )}
 
         {showSuggestions && suggestions.length > 0 && (
-          <ul className="absolute z-50 w-full mt-2 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl shadow-2xl max-h-60 overflow-y-auto py-2 animate-in fade-in slide-in-from-top-2 duration-200">
+          <ul
+            ref={listRef}
+            className="absolute z-50 w-full mt-2 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl shadow-2xl max-h-60 overflow-y-auto py-2 animate-in fade-in slide-in-from-top-2 duration-200"
+          >
             {suggestions.map((suggestion, index) => (
               <li
                 key={index}
@@ -89,7 +120,8 @@ const SearchBar = () => {
                   setInputValue(suggestion);
                   handleSearch(suggestion);
                 }}
-                className="px-6 py-2.5 hover:bg-blue-50 dark:hover:bg-blue-900/30 cursor-pointer text-gray-700 dark:text-gray-200 transition-colors flex items-center gap-3"
+                className={`px-6 py-2.5 cursor-pointer text-gray-700 dark:text-gray-200 transition-colors flex items-center gap-3 ${activeIndex === index ? "bg-blue-100 dark:bg-blue-900/50" : "hover:bg-blue-50 dark:hover:bg-blue-900/30"
+                  }`}
               >
                 <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
